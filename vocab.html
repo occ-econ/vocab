@@ -223,6 +223,47 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .filters button[aria-pressed="true"]{border-color:var(--accent);color:var(--ink);background:var(--accent-soft)}
 .letterhead{font-family:var(--f-word);font-size:22px;font-weight:700;scroll-margin-top:110px;margin-top:6px}
 .wrow .w .core-tag{font-family:var(--f-ui);font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-left:4px}
+
+/* daily lesson path */
+.today{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:var(--r);padding:20px 22px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px 32px;align-items:start}
+.today.met{border-top-color:var(--pos)}
+.today h2{font-size:clamp(24px,4vw,30px);margin:4px 0 6px}
+.today-main{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0}
+.steps{list-style:none;margin:10px 0 16px;padding:0;display:flex;flex-direction:column;gap:6px}
+.steps li{display:flex;gap:10px;align-items:baseline}
+.steps .n{font-family:var(--f-mono);font-size:12px;color:var(--accent);min-width:20px}
+.unitnote{font-size:13px;margin-top:10px}
+.stats{display:grid;gap:14px;min-width:180px}
+.stat .v{font-family:var(--f-word);font-size:28px;font-weight:600;line-height:1.05;font-variant-numeric:tabular-nums}
+.stat .k{font-size:12px;color:var(--muted)}
+@media (max-width:640px){.today{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line);padding-top:14px}.stat .v{font-size:22px}}
+.btn.big{padding:12px 26px;font-size:16px;margin-top:4px}
+details.map .mapnote{padding:0 18px 12px}
+details.map .mapsub{padding:6px 18px 10px}
+.units{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;padding:0 18px 18px}
+.unit{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;background:var(--bg);min-width:0}
+.unit.cur{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.unit.done .uhead b::after{content:" ✓";color:var(--pos)}
+.unit .uhead{display:flex;justify-content:space-between;font-size:13px;gap:8px}
+.unit .bar{width:100%}
+.unit .tags{display:flex;flex-wrap:wrap;gap:4px}
+.practice-h{margin-top:10px}
+.lesson{max-width:620px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.lhead{display:flex;align-items:center;gap:14px}
+.lbar{flex:1;height:10px;background:var(--line);border-radius:10px;overflow:hidden}
+.lbar i{display:block;height:100%;background:var(--pos);border-radius:10px;transition:width .3s}
+.stage{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.qdef{font-family:var(--f-word);font-size:21px;font-weight:600;line-height:1.35}
+.qsent{font-family:var(--f-word);font-size:19px;line-height:1.55}
+.blank{display:inline-block;min-width:96px;border-bottom:2px solid var(--accent);color:transparent;line-height:1.1}
+.intro .iw{font-family:var(--f-word);font-size:clamp(30px,7vw,42px);font-weight:700;display:flex;align-items:center;gap:12px;flex-wrap:wrap;line-height:1.15}
+.intro .def{font-size:18px;font-weight:500}
+.intro .ex,.feedback .ex{font-family:var(--f-word);font-style:italic;color:var(--muted)}
+.feedback .ex mark,.intro .ex mark{background:none;color:var(--ink);font-weight:600;font-style:normal}
+.intro .tags{display:flex;flex-wrap:wrap;gap:6px}
+.verdict{font-weight:700}
+.verdict.ok{color:var(--pos)} .verdict.no{color:var(--neg)}
+@media (prefers-reduced-motion: reduce){.lbar i{transition:none}}
 </style>
 </head>
 <body>
@@ -233,7 +274,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     <div>
       <div class="eyebrow">ISEE Upper Level · Verbal Reasoning</div>
       <h1>ISEE Vocabulary Deck</h1>
-      <p class="lead">Study words the way they connect: by shared root, by meaning family, and by positive or negative charge. Mark each word as no clue, still learning, or known, and the deck keeps track.</p>
+      <p class="lead">Do one lesson a day: about 20 words, mixing review with new words. The lesson plan tracks what you know and brings words back until they stick. The practice tools below are there whenever you want more.</p>
     </div>
     <div class="tally" aria-live="polite">
       <div class="eyebrow" id="tallyLabel">Known in core set</div>
@@ -243,8 +284,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     </div>
   </header>
 
-  <details class="guide" id="guide" open>
-    <summary>How to study without going alphabetically</summary>
+  <details class="guide" id="guide">
+    <summary>Study tips</summary>
     <div class="guide-body">
       <div class="guide-step"><span class="n">01</span><b>Start with a root</b><p>One root unlocks many words. Learn that <span class="mono">cred-</span> means "believe," and <i>credible</i>, <i>incredulous</i>, and <i>credulous</i> stop being three separate words.</p></div>
       <div class="guide-step"><span class="n">02</span><b>Learn meaning families</b><p>Most hard words are fancy ways to say something simple. <i>Loquacious</i>, <i>garrulous</i>, and <i>verbose</i> all mean "talkative." On the test, the simple word is often the answer.</p></div>
@@ -252,7 +293,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
       <div class="guide-step"><span class="n">04</span><b>Cross the groups</b><p><i>Benevolent</i> sits in the root group <span class="mono">bene-</span> and the family "kind." Meeting a word from two directions makes it stick.</p></div>
       <div class="guide-step"><span class="n">05</span><b>Learn from sentences</b><p>Read the example on the back of each card. "The tension was <i>palpable</i>" sticks better than a definition alone.</p></div>
       <div class="guide-step"><span class="n">06</span><b>Short sessions, then mix</b><p>Mark cards honestly: no clue, still learning, or know it. Review the first two piles often, and in the last weeks, quiz across all groups the way the test mixes them.</p></div>
-      <p class="plan"><b>A 15-minute daily routine:</b> one root group (flashcards), one meaning family (quiz), and one round of the charge drill. Once a week, run the Review tab.</p>
+      <p class="plan"><b>Daily routine:</b> do today's lesson first. If you have more time, press "Keep going" or pick a root group, meaning family, or drill under Practice more.</p>
     </div>
   </details>
 
@@ -292,7 +333,7 @@ const ORIGIN = {"L.":"Latin","Gk.":"Greek","Fr.":"French"};
 const CH = {"+":{cls:"c-pos",name:"positive"},"-":{cls:"c-neg",name:"negative"},"0":{cls:"c-neu",name:"neutral"}};
 
 /* ---------- state ---------- */
-const S = {deck:"core", tab:"meaning", group:null, mode:"list", query:"", allFilter:"all"};
+const S = {lesson:null, deck:"core", tab:"meaning", group:null, mode:"list", query:"", allFilter:"all"};
 let progress = {};
 try{ progress = JSON.parse(localStorage.getItem("isee-deck-progress")||"{}")||{}; }catch(e){ progress = {}; }
 
@@ -346,7 +387,7 @@ let store = null, saveTimer = null, saving = false, pendingSave = false;
 function saveLocal(){ try{ localStorage.setItem("isee-deck-progress", JSON.stringify(progress)); }catch(e){} }
 function setStatus(word, val){
   if(progress[word]===val) delete progress[word]; else progress[word]=val;
-  saveLocal(); queueRemote(); renderTally();
+  saveLocal(); queueRemote(); syncSched(word); renderTally();
 }
 function queueRemote(){ if(!store) return; clearTimeout(saveTimer); saveTimer=setTimeout(flushRemote,1500); }
 async function flushRemote(){
@@ -368,7 +409,7 @@ async function initStore(){
     let extra = false;
     Object.keys(progress).forEach(k=>{ if(!(k in remote)) extra = true; });
     progress = Object.assign({}, progress, remote);
-    saveLocal(); store = ref;
+    saveLocal(); seedPlan(); store = ref;
     document.getElementById("saveNote").textContent = "Progress saves to your account.";
     if(extra) queueRemote();
     render();
@@ -385,12 +426,276 @@ function renderTally(){
 
 /* ---------- main render ---------- */
 const main = document.getElementById("main");
+/* ---------- daily plan: lesson path, spaced review, streak ---------- */
+const PKEY = "isee-deck-plan", GOAL = 20, NEW_MAX = 12, REVIEW_DAY_AT = 40;
+const INTERVAL = [1,1,3,7,14,30,60];
+const POS = {adj:"adjective", verb:"verb", noun:"noun"};
+let plan = {sched:{}, days:{}, v:1};
+try{ const p = JSON.parse(localStorage.getItem(PKEY)||"null"); if(p && typeof p==="object" && p.sched) plan = {sched:p.sched||{}, days:p.days||{}, v:1}; }catch(e){}
+function dayNum(){ const d = new Date(); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())/864e5); }
+function dayKey(n){ return new Date(n*864e5).toISOString().slice(0,10); }
+function savePlan(){ try{ localStorage.setItem(PKEY, JSON.stringify(plan)); }catch(e){} }
+function hash(s){ let h=0; for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))|0; return Math.abs(h); }
+(function tidyDays(){ const tk = dayKey(dayNum()); Object.keys(plan.days).forEach(k=>{ const r = plan.days[k]; if(k!==tk && r && r.w){ r.n = r.w.length; delete r.w; } }); })();
+function todayRec(){ const k = dayKey(dayNum()); const r = plan.days[k] || (plan.days[k] = {w:[], s:0}); if(!r.w) r.w = []; if(!r.s) r.s = 0; return r; }
+function goalMet(n){ const r = plan.days[dayKey(n)]; return !!(r && r.s>0); }
+function streak(){ let n = dayNum(), c = 0; if(!goalMet(n)) n--; while(goalMet(n)){ c++; n--; } return c; }
+function touch(w){ const r = todayRec(); if(r.w.indexOf(w)<0) r.w.push(w); savePlan(); }
+function setMark(w, v){ if(progress[w]!==v){ progress[w] = v; saveLocal(); queueRemote(); } }
+
+/* the path: meaning families in deck order, grouped into units of about 36 words; core words first, then the rest of the full deck */
+const UNITS = [];
+(function(){
+  const order = FAMS.filter(f=>f.k!==NONE).concat(FAMS.filter(f=>f.k===NONE));
+  ["core","full"].forEach(phase=>{
+    let cur = null;
+    order.forEach(f=>{
+      const ws = ALL.filter(x=>x.fam===f.k && (phase==="core" ? x.core : !x.core));
+      if(!ws.length) return;
+      if(!cur) cur = {phase, fams:[], words:[]};
+      cur.fams.push(f.k); cur.words.push(...ws);
+      if(cur.words.length>=36){ UNITS.push(cur); cur = null; }
+    });
+    if(cur) UNITS.push(cur);
+  });
+  UNITS.forEach((u,i)=>u.n = i+1);
+})();
+const PATH = [].concat(...UNITS.map(u=>u.words));
+const learned = x => !!plan.sched[x.w] || progress[x.w]==="k";
+
+/* fold existing marks into the schedule: no clue / still learning are due now; known words come back later for a check */
+function seedPlan(){
+  const t = dayNum(); let ch = false;
+  ALL.forEach(x=>{ if(plan.sched[x.w]) return; const v = progress[x.w];
+    if(v==="n"||v==="l"){ plan.sched[x.w] = {l:0, d:t}; ch = true; }
+    else if(v==="k"){ plan.sched[x.w] = {l:3, d:t+7+hash(x.w)%28}; ch = true; } });
+  if(ch) savePlan();
+}
+function syncSched(w){
+  const v = progress[w], t = dayNum(), s = plan.sched[w];
+  if(v==="n"||v==="l") plan.sched[w] = {l:0, d:t};
+  else if(v==="k") plan.sched[w] = {l:Math.max(3, s ? s.l : 0), d:t+14};
+  savePlan();
+}
+function grade(x, ok){
+  const t = dayNum(); const s = plan.sched[x.w] || {l:0, d:t}; const v = progress[x.w];
+  if(ok){ s.l = Math.min(s.l+1, INTERVAL.length-1); s.d = t+INTERVAL[s.l];
+    if(v==="n") setMark(x.w,"l"); else if(s.l>=3 && v!=="k") setMark(x.w,"k"); }
+  else { s.l = 0; s.d = t+1; if(v!=="n") setMark(x.w,"l"); }
+  plan.sched[x.w] = s; touch(x.w);
+}
+const flaggedWords = () => ALL.filter(x=>progress[x.w]==="n"||progress[x.w]==="l");
+function dueWords(){
+  const t = dayNum(), rank = x => progress[x.w]==="n" ? 0 : progress[x.w]==="l" ? 1 : 2;
+  return ALL.filter(x=>{ const s = plan.sched[x.w]; return s && s.d<=t; })
+    .sort((a,b)=> rank(a)-rank(b) || plan.sched[a.w].d-plan.sched[b.w].d);
+}
+function blankEx(x){
+  const base = x.w.toLowerCase().replace(/e$/,"").replace(/y$/,"");
+  const re = new RegExp("\\b("+base.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"[a-z]*)","i");
+  if(!re.test(x.ex)) return null;
+  return esc(x.ex).replace(re,'<span class="blank">______</span>');
+}
+const LENS = {
+  charge:{name:"Charge round", text:"Decide whether each of today's words is positive, negative, or neutral. On the test, this is how you cross off answers when you aren't sure of a word."},
+  root:{name:"Root round", text:"Pick what the root inside each word means. Roots let you decode words you have never seen."},
+  cloze:{name:"Fill-in-the-blank round", text:"Choose the word that fits each sentence, the way the sentence-completion questions work."}
+};
+function lensFor(ws){
+  const order = ["charge","root","cloze"]; const start = (dayNum()+todayRec().s)%3;
+  for(let k=0;k<3;k++){ const L = order[(start+k)%3];
+    if(L==="root" && ws.filter(x=>x.root && ROOT[x.root]).length<4) continue;
+    if(L==="cloze" && ws.filter(x=>blankEx(x)).length<4) continue;
+    return L; }
+  return "charge";
+}
+function buildSession(){
+  const due = dueWords(), fresh = PATH.filter(x=>!plan.sched[x.w] && progress[x.w]!=="k"), flagged = flaggedWords();
+  const reviewDay = flagged.length>REVIEW_DAY_AT;
+  let rev, nw;
+  if(reviewDay){
+    rev = due.slice(0,GOAL);
+    if(rev.length<GOAL){ const have = new Set(rev.map(x=>x.w)); shuffle(flagged).forEach(x=>{ if(rev.length<GOAL && !have.has(x.w)){ rev.push(x); have.add(x.w); } }); }
+    nw = [];
+  } else {
+    rev = due.slice(0, GOAL-NEW_MAX);
+    nw = fresh.slice(0, GOAL-rev.length);
+  }
+  let kind = reviewDay ? "review" : "normal";
+  if(!rev.length && !nw.length){ kind = "mixed"; rev = shuffle(ALL.filter(learned)).slice(0,GOAL); }
+  return {kind, rev, nw, flagged:flagged.length, lens:lensFor(rev.concat(nw))};
+}
+
+/* question builders */
+function wordChoices(x){
+  const pool = shuffle(ALL.filter(y=>y.pos===x.pos && y.fam!==x.fam && y.w!==x.w && (y.core || !x.core)));
+  const out = [x.w]; for(const y of pool){ if(out.length>=4) break; if(out.indexOf(y.w)<0) out.push(y.w); }
+  const c = shuffle(out); return {choices:c, answer:c.indexOf(x.w)};
+}
+function makeQ(x, qt){
+  if(qt==="cloze"){ const b = blankEx(x); if(!b) return makeQ(x,"def");
+    const w = wordChoices(x); return {prompt:`<div class="eyebrow">Which word best fits the blank?</div><div class="qsent">${b}</div>`, choices:w.choices, answer:w.answer}; }
+  if(qt==="def"){ const w = wordChoices(x);
+    return {prompt:`<div class="eyebrow">Which word has this meaning?</div><div class="qdef">${esc(x.def)}</div>`, choices:w.choices, answer:w.answer}; }
+  if(qt==="charge"){ return {prompt:`<div class="eyebrow">Positive, negative, or neutral?</div><div class="qword">${esc(x.w)} ${sayBtn(x.w)}</div>`,
+    choices:["+ Positive","− Negative","○ Neutral"], answer:["+","-","0"].indexOf(x.charge)}; }
+  if(qt==="root" && x.root && ROOT[x.root]){ const correct = ROOT[x.root].meaning;
+    const meanings = [...new Set(Object.values(ROOT).map(r=>r.meaning))];
+    const c = shuffle([correct, ...shuffle(meanings.filter(m=>m!==correct)).slice(0,3)]);
+    return {prompt:`<div class="eyebrow">What does the root in this word mean?</div><div class="qword">${esc(x.w)} ${sayBtn(x.w)}</div>`, choices:c, answer:c.indexOf(correct)}; }
+  const m = makeQuestion(x, null, false);
+  return {prompt:`<div class="eyebrow">Choose the word or phrase closest in meaning</div><div class="qword">${esc(x.w.toUpperCase())} ${sayBtn(x.w)}</div>`, choices:m.choices, answer:m.answer};
+}
+
+/* running a lesson */
+function startLesson(){
+  const p = buildSession(); const Q = [];
+  if(p.rev.length){
+    Q.push({t:"stage", label:"Step 1 · Review", title: p.kind==="mixed" ? "Mixed practice" : `${p.rev.length} words to review`,
+      text: p.kind==="mixed" ? "Nothing is due, so here is a mix of words you have already learned." : "These are words you marked No clue or Still learning, plus earlier words that are scheduled to come back. Answer from memory."});
+    p.rev.forEach((x,i)=>Q.push({t:"q", src:"rev", x, qt:["syn","cloze","def"][i%3]}));
+  }
+  if(p.nw.length){
+    Q.push({t:"stage", label:`Step ${p.rev.length?2:1} · New words`, title:`${p.nw.length} new words`,
+      text:"You will meet four words at a time, then use them right away. If you already know a word, tap “I already know this” to skip it."});
+    for(let i=0;i<p.nw.length;i+=4){ const b = p.nw.slice(i,i+4);
+      b.forEach(x=>Q.push({t:"intro", x}));
+      shuffle(b).forEach((x,j)=>Q.push({t:"q", src:"new", x, qt:(j%2 ? "cloze" : "def")})); }
+  }
+  const lw = shuffle(p.rev.concat(p.nw)).filter(x=> p.lens!=="root" || (x.root && ROOT[x.root])).filter(x=> p.lens!=="cloze" || blankEx(x)).slice(0,8);
+  if(lw.length){
+    Q.push({t:"stage", label:"Last step · Another lens", title:LENS[p.lens].name, text:LENS[p.lens].text});
+    lw.forEach(x=>Q.push({t:"q", src:"lens", x, qt:p.lens}));
+  }
+  S.lesson = {Q, i:0, right:0, asked:0, miss:{}, kind:p.kind}; S.group = null;
+  render(); window.scrollTo({top:0});
+}
+function lessonPick(i){
+  const L = S.lesson, c = L.Q[L.i]; if(!c || c.t!=="q" || c.picked!==undefined) return;
+  c.picked = i; const ok = i===c.q.answer;
+  if(c.src==="rev" || c.src==="new"){ grade(c.x, ok); L.asked++; if(ok) L.right++; }
+  else if(c.src==="lens"){ if(ok) touch(c.x.w); else grade(c.x, false); L.asked++; if(ok) L.right++; }
+  else touch(c.x.w);
+  if(!ok){ L.miss[c.x.w] = 1;
+    if((c.re||0)<2){ const alt = {syn:"def", def:"syn", cloze:"def"}[c.qt] || c.qt; L.Q.push({t:"q", src:"redo", x:c.x, qt:alt, re:(c.re||0)+1}); } }
+  render();
+}
+function lessonNext(){
+  const L = S.lesson; L.i++;
+  if(L.i>=L.Q.length){ const r = todayRec(); r.s = (r.s||0)+1; savePlan(); L.finished = true; }
+  render(); window.scrollTo({top:0});
+}
+function lessonKnow(){
+  const L = S.lesson, c = L.Q[L.i]; if(!c || c.t!=="intro") return;
+  setMark(c.x.w,"k"); plan.sched[c.x.w] = {l:3, d:dayNum()+14}; touch(c.x.w);
+  for(let j=L.i+1;j<L.Q.length;j++){ if(L.Q[j].t==="q" && L.Q[j].src==="new" && L.Q[j].x===c.x){ L.Q.splice(j,1); break; } }
+  lessonNext();
+}
+function lessonCard(c){
+  if(c.t==="stage") return `<div class="qcard"><div class="stage">${esc(c.label)}</div><h2>${esc(c.title)}</h2><p class="muted">${esc(c.text)}</p>
+    <div class="actions" style="justify-content:flex-end"><button class="btn primary" data-ls="next">Start</button></div></div>`;
+  if(c.t==="intro"){ const x = c.x, r = x.root && ROOT[x.root];
+    return `<div class="qcard intro"><div class="stage">New word</div>
+      <div class="iw">${esc(x.w)} ${sayBtn(x.w)}</div><div class="pos-tag">${POS[x.pos]||esc(x.pos)}</div>
+      <div class="def">${esc(x.def)}</div><div class="ex">${markWord(x.ex,x.w)}</div>
+      <div class="tags">${x.fam!==NONE?`<span class="linkchip static">family: ${esc(x.label)}</span>`:""}${r?`<span class="linkchip static">root: <span class="mono">${esc(r.forms.split(",")[0])}</span> = ${esc(r.meaning)}</span>`:""}${chip(x.charge)}</div>
+      <div class="actions" style="justify-content:flex-end"><button class="btn" data-ls="know">I already know this</button><button class="btn primary" data-ls="got">Got it</button></div></div>`; }
+  if(!c.q) c.q = makeQ(c.x, c.qt);
+  const q = c.q, done = c.picked!==undefined, x = c.x;
+  const lab = {rev:"Review", new:"Practice", lens:"Another lens", redo:"Try again"}[c.src];
+  let h = `<div class="qcard"><div class="stage">${lab}</div>${q.prompt}
+    <div class="choices">${q.choices.map((t,i)=>`<button class="choice ${done?(i===q.answer?"right":(i===c.picked?"wrong":"")):""}" data-ls="pick" data-i="${i}" ${done?"disabled":""}><span class="L">${i+1}</span><span>${esc(t)}</span></button>`).join("")}</div>`;
+  if(done){ const ok = c.picked===q.answer; const r = x.root && ROOT[x.root];
+    h += `<div class="feedback"><span class="verdict ${ok?"ok":"no"}">${ok?"Right.":"Not quite."}</span> <b>${esc(x.w)}</b>: ${esc(x.def)}.
+      <div class="ex" style="margin-top:4px">${markWord(x.ex,x.w)}</div>
+      ${c.qt==="charge"?`<div style="margin-top:6px">${chip(x.charge)}</div>`:""}
+      ${c.qt==="root"&&r?`<div class="muted" style="margin-top:6px"><span class="mono">${esc(r.forms)}</span> means “${esc(r.meaning)}.”</div>`:""}
+      ${!ok && (c.re||0)<2 ? `<p class="muted" style="margin-top:6px">This word will come up again before the lesson ends.</p>` : ""}</div>
+      <div class="actions" style="justify-content:flex-end"><button class="btn primary" data-ls="next">Continue</button></div>`; }
+  return h + `</div>`;
+}
+function renderLesson(){
+  const L = S.lesson;
+  if(L.finished){
+    const missed = Object.keys(L.miss);
+    main.innerHTML = `<div class="lesson"><div class="qcard" style="text-align:center;align-items:center">
+      <div class="eyebrow">Lesson complete</div><div class="score">${L.right} / ${L.asked}</div><p class="muted">right on the first try</p>
+      <p><b>${streak()}</b> day streak · <b>${todayRec().w.length}</b> words practiced today</p>
+      ${missed.length?`<p class="muted">Missed: ${missed.map(esc).join(", ")}. These come back tomorrow.</p>`:`<p class="muted">No misses this round.</p>`}
+      <div class="actions"><button class="btn primary" data-ls="keep">Keep going: another set</button><button class="btn" data-ls="home">Back to home</button></div></div></div>`;
+    return;
+  }
+  const c = L.Q[L.i]; const pct = Math.round(100*L.i/L.Q.length);
+  main.innerHTML = `<div class="lesson"><div class="lhead"><button class="back" data-ls="exit">✕ Exit</button>
+    <div class="lbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><i style="width:${pct}%"></i></div></div>
+    ${lessonCard(c)}
+    <div class="keys" style="text-align:center"><kbd>1</kbd> to <kbd>4</kbd> answer · <kbd>Enter</kbd> continue · Your answers save as you go.</div></div>`;
+}
+
+/* home: today card and course map */
+function renderHome(){
+  const p = buildSession(), rec = todayRec(), met = rec.s>0, st = streak();
+  const core = ALL.filter(x=>x.core), coreLearned = core.filter(learned).length;
+  const remaining = PATH.filter(x=>x.core && !learned(x)).length;
+  const finish = remaining ? new Date(Date.now()+Math.ceil(remaining/NEW_MAX)*864e5).toLocaleDateString(undefined,{month:"short", day:"numeric"}) : "Done";
+  const cur = UNITS.find(u=>u.words.some(x=>!learned(x)));
+  const famsNew = [...new Set(p.nw.map(x=>x.fam))].map(k=>famLabel(k));
+  const title = met ? "Today's goal is done" : p.kind==="review" ? "Today is a review day" : p.kind==="mixed" ? "Mixed practice" : "Today's lesson";
+  const desc = met ? `You practiced ${rec.w.length} words today. Keep going for another set, or use the practice tools below.`
+    : p.kind==="review" ? `You have ${p.flagged} words marked No clue or Still learning, so today is all review. New words come back once that pile is under ${REVIEW_DAY_AT}.`
+    : p.kind==="mixed" ? "You have finished the path and nothing is due. Here is a mixed set of words you have learned."
+    : `About ${p.rev.length+p.nw.length} words, 10 to 15 minutes.`;
+  const date = new Date().toLocaleDateString(undefined,{weekday:"long", month:"long", day:"numeric"});
+  let n = 0; const step = (t,d) => `<li><span class="n">0${++n}</span><span><b>${t}</b> ${d}</span></li>`;
+  const steps = (p.rev.length ? step("Review", `${p.rev.length} words`) : "")
+    + (p.nw.length ? step("Learn", `${p.nw.length} new words${famsNew.length?` from <i>${famsNew.slice(0,3).map(esc).join("</i>, <i>")}</i>${famsNew.length>3?", and more":""}`:""}`) : "")
+    + step("Another lens", LENS[p.lens].name.toLowerCase());
+  const btn = met ? "Keep going: another set" : rec.w.length ? "Continue today's lesson" : "Start today's lesson";
+  const unitTile = u => { const k = u.words.filter(learned).length, done = k===u.words.length, isCur = u===cur;
+    return `<div class="unit ${done?"done":""} ${isCur?"cur":""}"><div class="uhead"><b>Unit ${u.n}</b><span class="muted">${k} / ${u.words.length}</span></div>
+      <div class="bar"><i style="width:${Math.round(100*k/u.words.length)}%"></i></div>
+      <div class="tags">${u.fams.map(f=>`<span class="linkchip" role="button" tabindex="0" data-jump="fam:${f}">${esc(famLabel(f))}</span>`).join("")}</div></div>`; };
+  const coreUnits = UNITS.filter(u=>u.phase==="core"), fullUnits = UNITS.filter(u=>u.phase==="full");
+  return `<section class="today ${met?"met":""}">
+    <div class="today-main"><div class="eyebrow">${esc(date)}</div><h2>${title}</h2><p class="muted">${desc}</p>
+      ${met?"":`<ol class="steps">${steps}</ol>`}
+      <button class="btn primary big" data-ls="start">${btn}</button>
+      ${cur?`<p class="muted unitnote">You are in <b>Unit ${cur.n}</b> of ${UNITS.length}${cur.phase==="full"?" (full deck)":""}.</p>`:""}</div>
+    <div class="stats">
+      <div class="stat"><div class="v">${st}</div><div class="k">day streak</div></div>
+      <div class="stat"><div class="v">${coreLearned.toLocaleString()}</div><div class="k">of ${core.length.toLocaleString()} core words learned</div></div>
+      <div class="stat"><div class="v">${finish}</div><div class="k">${remaining?"core finish at one lesson a day":"core set"}</div></div>
+    </div></section>
+  <details class="guide map"><summary>Course map: ${coreUnits.length} core units, then ${fullUnits.length} more</summary>
+    <p class="tab-note mapnote">Lessons follow these units in order. Each unit is a few meaning families. Tap a family to study it on its own.</p>
+    <div class="units">${coreUnits.map(unitTile).join("")}</div>
+    ${fullUnits.length?`<h3 class="mapsub">Full deck</h3><div class="units">${fullUnits.map(unitTile).join("")}</div>`:""}
+  </details>
+  <div><h2 class="practice-h">Practice more</h2><p class="tab-note">Extra practice beyond the daily lesson. Everything you mark here also feeds the lesson plan.</p></div>`;
+}
+main.addEventListener("click", e=>{
+  const b = e.target.closest("[data-ls]"); if(!b) return; const a = b.dataset.ls;
+  if(a==="start" || a==="keep") startLesson();
+  else if(a==="exit" || a==="home"){ S.lesson = null; render(); window.scrollTo({top:0}); }
+  else if(a==="pick") lessonPick(+b.dataset.i);
+  else if(a==="next" || a==="got") lessonNext();
+  else if(a==="know") lessonKnow();
+});
+document.addEventListener("keydown", e=>{
+  if(!S.lesson || S.lesson.finished || S.query || (e.target.matches && e.target.matches("input,textarea"))) return;
+  const L = S.lesson, c = L.Q[L.i]; if(!c) return;
+  if(c.t==="q" && c.picked===undefined && /^[1-4]$/.test(e.key)){ const i = +e.key-1; if(c.q && i<c.q.choices.length){ e.preventDefault(); lessonPick(i); } return; }
+  if(e.key==="Enter"){ if(c.t==="q" && c.picked===undefined) return; e.preventDefault(); lessonNext(); }
+});
+seedPlan();
+
 function render(){
   renderTally();
   if(S.query) return renderSearch();
+  if(S.lesson) return renderLesson();
   if(S.group) return renderStudy();
   const tabs = [["meaning","By meaning"],["root","By root"],["charge","By charge"],["all","All words"],["review","Review"]];
-  let h = `<div class="tabs" role="tablist">${tabs.map(t=>`<button role="tab" data-tab="${t[0]}" aria-selected="${S.tab===t[0]}">${t[1]}${t[0]==="review"?` (${ALL.filter(x=>progress[x.w]==="l"||progress[x.w]==="n").length})`:""}</button>`).join("")}</div>`;
+  let h = renderHome() + `<div class="tabs" role="tablist">${tabs.map(t=>`<button role="tab" data-tab="${t[0]}" aria-selected="${S.tab===t[0]}">${t[1]}${t[0]==="review"?` (${ALL.filter(x=>progress[x.w]==="l"||progress[x.w]==="n").length})`:""}</button>`).join("")}</div>`;
   if(S.tab==="meaning") h += renderMeaning();
   if(S.tab==="root") h += renderRoots();
   if(S.tab==="charge") h += renderCharge();
